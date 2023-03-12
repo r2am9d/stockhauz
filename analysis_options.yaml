@@ -23,38 +23,52 @@ analyzer:
 
 linter:
   rules:
-    always_put_control_body_on_new_line: false
     always_put_required_named_parameters_first: false
     always_specify_types: false
     always_use_package_imports: false
     avoid_annotating_with_dynamic: false
     avoid_catches_without_on_clauses: false
-    avoid_returning_null: false
-    avoid_classes_with_only_static_members: false
-    avoid_types_on_closure_parameters: false
+    avoid_catching_errors: false
     avoid_final_parameters: false
-    avoid_redundant_argument_values: false
+    avoid_multiple_declarations_per_line: false
     avoid_positional_boolean_parameters: false
+    avoid_private_typedef_functions: false
+    avoid_returning_this: false
+    avoid_types_on_closure_parameters: false
+    avoid_web_libraries_in_flutter: false
     cascade_invocations: false
+    close_sinks: false
+    comment_references: false
     constant_identifier_names: false
     depend_on_referenced_packages: false
-    directives_ordering: false
     diagnostic_describe_all_properties: false
-    flutter_style_todos: false
+    discarded_futures: false
+    do_not_use_environment: false
+    join_return_with_assignment: false
     lines_longer_than_80_chars: false
+    literal_only_boolean_expressions: false
+    no_runtimeType_toString: false
     omit_local_variable_types: false
+    one_member_abstracts: false
     parameter_assignments: false
     prefer_asserts_with_message: false
-    prefer_double_quotes: false
     prefer_constructors_over_static_methods: false
+    prefer_double_quotes: false
     prefer_expression_function_bodies: false
-    prefer_mixin: false
     prefer_final_parameters: false
     prefer_int_literals: false
+    prefer_mixin: false
+    prefer_null_aware_method_calls: false
     prefer_relative_imports: false
     public_member_api_docs: false
-    sort_pub_dependencies: false
-    sort_constructors_first: false
-    type_annotate_public_apis: false
-    unnecessary_final: false
     require_trailing_commas: false
+    sort_pub_dependencies: false
+    type_annotate_public_apis: false
+    unawaited_futures: false
+    unnecessary_final: false
+    unnecessary_lambdas: false
+    unnecessary_raw_strings: false
+    unreachable_from_main: false
+    use_decorated_box: false
+    use_string_buffers: false
+    use_to_and_as_if_applicable: false

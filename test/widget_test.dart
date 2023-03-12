@@ -8,12 +8,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:stockhauz/main.dart';
+import 'package:stockhauz/app.dart';
+import 'package:stockhauz/src/themes/app_theme.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    final appTheme = await AppTheme.instance;
+    await tester.pumpWidget(App(theme: appTheme.theme));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
