@@ -24,6 +24,15 @@ dependencies:
   # Routing
   beamer: ^1.5.3
 
+  # Utilities
+  permission_handler: ^10.2.0
+  device_info_plus: ^8.1.0
+  package_info_plus: ^3.0.3
+
+  # Local Packages
+  font_awesome_flutter:
+    path: ./vendor/font_awesome_flutter
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

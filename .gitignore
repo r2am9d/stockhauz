@@ -48,3 +48,6 @@ app.*.map.json
 .env.*
 **/ios/.envfile
 **/ios/Flutter/tmp.xcconfig
+
+# Private packages
+vendor/

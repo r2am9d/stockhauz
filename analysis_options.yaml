@@ -7,6 +7,7 @@ analyzer:
     - "test/.test_coverage.dart"
     - "bin/cache/**"
     - "lib/generated_plugin_registrant.dart"
+    - "vendor/**"
 
   language:
     strict-casts: true
@@ -42,8 +43,10 @@ linter:
     constant_identifier_names: false
     depend_on_referenced_packages: false
     diagnostic_describe_all_properties: false
+    directives_ordering: false
     discarded_futures: false
     do_not_use_environment: false
+    flutter_style_todos: false
     join_return_with_assignment: false
     lines_longer_than_80_chars: false
     literal_only_boolean_expressions: false

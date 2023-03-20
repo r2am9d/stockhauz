@@ -15,8 +15,8 @@ class AppTheme {
     return _instance;
   }
 
-  static late ThemeData _theme;
-  static late String _themeString;
+  static late final ThemeData _theme;
+  static late final String _themeString;
   static final AppTheme _instance = AppTheme._internal();
 
   ThemeData get theme => _theme;
