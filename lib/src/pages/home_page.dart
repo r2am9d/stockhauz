@@ -1,23 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final counterProvider = StateNotifierProvider<Counter, int>((_) => Counter());
-
-class Counter extends StateNotifier<int> {
-  Counter() : super(0);
-
-  void increment() => state++;
-  void decrement() => state--;
-}
-
-class HomePage extends HookConsumerWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final count = ref.watch(counterProvider);
-    final counterNotifier = ref.read(counterProvider.notifier);
-
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home Page'),
@@ -30,7 +17,7 @@ class HomePage extends HookConsumerWidget {
               'You have pushed the button this many times:',
             ),
             Text(
-              '$count',
+              '123',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],
@@ -40,13 +27,13 @@ class HomePage extends HookConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
-            onPressed: counterNotifier.increment,
+            onPressed: () {},
             tooltip: 'Increment',
             child: const Icon(Icons.add),
           ),
           const SizedBox(height: 8.0),
           FloatingActionButton(
-            onPressed: counterNotifier.decrement,
+            onPressed: () {},
             tooltip: 'Increment',
             child: const Icon(Icons.remove),
           ),

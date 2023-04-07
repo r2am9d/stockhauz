@@ -49,5 +49,8 @@ app.*.map.json
 **/ios/.envfile
 **/ios/Flutter/tmp.xcconfig
 
+# Flutter gen
+lib/gen/**
+
 # Private packages
 vendor/

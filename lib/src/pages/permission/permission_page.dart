@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:stockhauz/src/themes/app_color.dart';
-import 'package:stockhauz/src/providers/permission_provider.dart';
+import 'package:stockhauz/gen/colors.gen.dart';
+import 'package:stockhauz/src/bloc/permission/permission_bloc.dart';
 import 'package:stockhauz/src/pages/permission/widgets/permission_list_widget.dart';
 
-class PermissionPage extends HookConsumerWidget {
+class PermissionPage extends StatelessWidget {
   const PermissionPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final tD = Theme.of(context);
     final mQ = MediaQuery.of(context);
-    final permissionStatus = ref.watch(permStatusProvider);
+    final permissionBloc = BlocProvider.of<PermissionBloc>(context);
 
     return Scaffold(
       body: Container(
@@ -20,8 +20,8 @@ class PermissionPage extends HookConsumerWidget {
           vertical: kToolbarHeight + 32.0,
         ),
         width: mQ.size.width,
-        decoration: BoxDecoration(
-          color: AppColor().dirtyWhite,
+        decoration: const BoxDecoration(
+          color: AppColor.dirtyWhite,
         ),
         child: Column(
           children: <Widget>[
@@ -32,7 +32,7 @@ class PermissionPage extends HookConsumerWidget {
                     text: 'Stockhauz',
                     style: tD.textTheme.headlineLarge!.copyWith(
                       fontSize: 28,
-                      color: AppColor().primary,
+                      color: AppColor.primary,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -40,7 +40,7 @@ class PermissionPage extends HookConsumerWidget {
                     text: ' needs access!',
                     style: tD.textTheme.headlineMedium!.copyWith(
                       fontSize: 24,
-                      color: AppColor().black,
+                      color: AppColor.black,
                     ),
                   ),
                 ],
@@ -53,16 +53,16 @@ class PermissionPage extends HookConsumerWidget {
       ),
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(32.0),
-        decoration: BoxDecoration(
-          color: AppColor().dirtyWhite,
+        decoration: const BoxDecoration(
+          color: AppColor.dirtyWhite,
         ),
         child: ElevatedButton(
-          onPressed: () async {
-            await ref.read(permStatusProvider.notifier).requestPermission();
+          onPressed: () {
+            permissionBloc.add(const PermissionRequest());
           },
           style: ElevatedButton.styleFrom(
-            foregroundColor: AppColor().dirtyWhite,
-            backgroundColor: AppColor().primary,
+            foregroundColor: AppColor.dirtyWhite,
+            backgroundColor: AppColor.primary,
             padding: const EdgeInsets.all(24.0),
           ),
           child: const Text('Allow Access'),

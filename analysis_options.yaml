@@ -2,12 +2,13 @@ include: all_lint_rules.yaml
 
 analyzer:
   exclude:
+    - "vendor/**"
+    - "lib/gen/**"
     - "**/*.g.dart"
+    - "bin/cache/**"
     - "**/*.freezed.dart"
     - "test/.test_coverage.dart"
-    - "bin/cache/**"
     - "lib/generated_plugin_registrant.dart"
-    - "vendor/**"
 
   language:
     strict-casts: true

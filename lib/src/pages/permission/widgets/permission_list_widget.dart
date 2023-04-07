@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:stockhauz/src/themes/app_color.dart';
+import 'package:stockhauz/gen/colors.gen.dart';
 
 class PermissionListWidget extends StatelessWidget {
   const PermissionListWidget({super.key});
@@ -58,7 +58,7 @@ class _PermissionListItem extends StatelessWidget {
           child: Icon(
             item['icon'] as IconData,
             size: 28.0,
-            color: AppColor().primary,
+            color: AppColor.black,
           ),
         ),
         Expanded(
@@ -76,7 +76,7 @@ class _PermissionListItem extends StatelessWidget {
               Text(
                 item['description'] as String,
                 style: tD.textTheme.bodyMedium!.copyWith(
-                  color: AppColor().black.withOpacity(.30),
+                  color: AppColor.black.withOpacity(.30),
                 ),
               ),
             ],
@@ -104,7 +104,7 @@ class _PermissionListItemDivider extends StatelessWidget {
             flex: 7,
             child: Divider(
               height: 1,
-              color: AppColor().black.withOpacity(.05),
+              color: AppColor.black.withOpacity(.05),
             ),
           ),
         ],

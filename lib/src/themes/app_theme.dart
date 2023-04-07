@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:json_theme/json_theme.dart';
 
+import 'package:stockhauz/gen/assets.gen.dart';
+
 class AppTheme {
   AppTheme._internal();
 
   static Future<AppTheme> get instance async {
-    _themeString =
-        await rootBundle.loadString('assets/themes/appainter_theme.json');
+    _themeString = await rootBundle.loadString(Assets.themes.appTheme);
     _theme = ThemeDecoder.decodeThemeData(jsonDecode(_themeString))!;
 
     return _instance;
