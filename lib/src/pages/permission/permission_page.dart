@@ -25,6 +25,16 @@ class PermissionPage extends StatelessWidget {
         ),
         child: Column(
           children: <Widget>[
+            BlocBuilder<PermissionBloc, PermissionState>(
+              builder: (
+                BuildContext permissionContext,
+                PermissionState permissionState,
+              ) {
+                final permissionLoadedState =
+                    permissionBloc.states<PermissionLoaded>();
+                return Text('${permissionLoadedState!.status}');
+              },
+            ),
             Text.rich(
               TextSpan(
                 children: <TextSpan>[

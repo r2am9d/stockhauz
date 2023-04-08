@@ -6,14 +6,18 @@ import 'package:equatable/equatable.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:multi_state_bloc/multi_state_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:stockhauz/src/utils/db_util.dart';
 
 part 'permission_event.dart';
 part 'permission_state.dart';
 
 class PermissionBloc extends MultiStateBloc<PermissionEvent, PermissionState> {
   PermissionBloc() : super(const PermissionInitial()) {
-    on<PermissionRequest>(_request, transformer: sequential());
+    on<PermissionLoad>(_load, transformer: sequential());
     on<PermissionValidate>(_validate, transformer: sequential());
+    on<PermissionObserve>(_observe, transformer: sequential());
+
+    on<PermissionRequest>(_request, transformer: sequential());
 
     holdState(() => const PermissionLoaded());
   }
@@ -26,11 +30,30 @@ class PermissionBloc extends MultiStateBloc<PermissionEvent, PermissionState> {
     Permission.notification,
   ];
 
+  void _load(PermissionLoad event, Emitter<PermissionState> emit) {
+    DbUtil.loadPermission();
+  }
+
+  void _validate(PermissionValidate event, Emitter<PermissionState> emit) {
+    final permission = DbUtil.getPermission();
+
+    if (permission.status) {
+      emit(const PermissionLoaded(PermissionStatus.granted));
+    } else {
+      emit(const PermissionLoaded());
+    }
+  }
+
+  // TODO: Define implementation
+  void _observe(PermissionObserve event, Emitter<PermissionState> emit) {}
+
   Future<void> _request(
     PermissionRequest event,
     Emitter<PermissionState> emit,
   ) async {
+    final permission = DbUtil.getPermission();
     final permStatusList = <PermissionStatus>[];
+
     for (final perm in perms) {
       final permStatus = await perm.status;
       if (!permStatus.isGranted) {
@@ -49,17 +72,8 @@ class PermissionBloc extends MultiStateBloc<PermissionEvent, PermissionState> {
         permStatusList.contains(PermissionStatus.permanentlyDenied)) {
       emit(const PermissionLoaded());
     } else {
+      DbUtil.savePermission(permission..status = true);
       emit(const PermissionLoaded(PermissionStatus.granted));
-    }
-  }
-
-  Future<void> _validate(
-    PermissionValidate event,
-    Emitter<PermissionState> emit,
-  ) async {
-    final permissionLoadedState = states<PermissionLoaded>()!;
-    if (permissionLoadedState.status == PermissionStatus.denied) {
-      openAppSettings();
     }
   }
 }

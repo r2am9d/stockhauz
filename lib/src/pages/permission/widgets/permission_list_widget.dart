@@ -10,17 +10,20 @@ class PermissionListWidget extends StatelessWidget {
     {
       'icon': FontAwesomeIcons.solidDatabase,
       'title': 'Storage',
-      'description': '',
+      'description':
+          'Empowers you to seamlessly save, access, and manage your files, documents, and media, making your app experience more convenient and organized.',
     },
     {
       'icon': FontAwesomeIcons.solidPhotoFilmMusic,
       'title': 'Camera & Media',
-      'description': '',
+      'description':
+          'Allows you to capture photos effortlessly and enhancing your app usage to the fullest potential.',
     },
     {
       'icon': FontAwesomeIcons.solidBellOn,
       'title': 'Notifications',
-      'description': 'Will occasionally send notifications.',
+      'description':
+          'Greatly enhance your experience with our app by providing you with local real-time updates and important information.',
     },
   ];
 

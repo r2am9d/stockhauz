@@ -16,7 +16,9 @@ class App extends StatelessWidget {
       home: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => PermissionBloc(),
+            create: (context) => PermissionBloc()
+              ..add(const PermissionLoad())
+              ..add(const PermissionValidate()),
           ),
         ],
         child: const PermissionPage(),
