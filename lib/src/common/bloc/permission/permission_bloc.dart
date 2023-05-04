@@ -6,17 +6,17 @@ import 'package:equatable/equatable.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:multi_state_bloc/multi_state_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:stockhauz/src/utils/db_util.dart';
+
+import 'package:stockhauz/src/utils/log_util.dart';
+import 'package:stockhauz/src/db/daos/permission_dao.dart';
 
 part 'permission_event.dart';
 part 'permission_state.dart';
 
 class PermissionBloc extends MultiStateBloc<PermissionEvent, PermissionState> {
   PermissionBloc() : super(const PermissionInitial()) {
-    on<PermissionLoad>(_load, transformer: sequential());
+    on<PermissionInitialize>(_initialize, transformer: sequential());
     on<PermissionValidate>(_validate, transformer: sequential());
-    on<PermissionObserve>(_observe, transformer: sequential());
-
     on<PermissionRequest>(_request, transformer: sequential());
 
     holdState(() => const PermissionLoaded());
@@ -30,39 +30,57 @@ class PermissionBloc extends MultiStateBloc<PermissionEvent, PermissionState> {
     Permission.notification,
   ];
 
-  void _load(PermissionLoad event, Emitter<PermissionState> emit) {
-    DbUtil.loadPermission();
+  void _initialize(
+    PermissionInitialize event,
+    Emitter<PermissionState> emit,
+  ) {
+    PermissionDao.initializePermission();
   }
 
-  void _validate(PermissionValidate event, Emitter<PermissionState> emit) {
-    final permission = DbUtil.getPermission();
+  Future<void> _validate(
+    PermissionValidate event,
+    Emitter<PermissionState> emit,
+  ) async {
+    final isGranted = await _isGranted(false);
+    final permission = PermissionDao.getPermission();
 
-    if (permission.status) {
+    if (isGranted) {
+      PermissionDao.savePermission(permission..status = true);
       emit(const PermissionLoaded(PermissionStatus.granted));
     } else {
       emit(const PermissionLoaded());
     }
   }
 
-  // TODO: Define implementation
-  void _observe(PermissionObserve event, Emitter<PermissionState> emit) {}
-
   Future<void> _request(
     PermissionRequest event,
     Emitter<PermissionState> emit,
   ) async {
-    final permission = DbUtil.getPermission();
+    final isGranted = await _isGranted();
+    final permission = PermissionDao.getPermission();
+
+    if (isGranted) {
+      PermissionDao.savePermission(permission..status = true);
+      emit(const PermissionLoaded(PermissionStatus.granted));
+    } else {
+      emit(const PermissionLoaded());
+    }
+  }
+
+  Future<bool> _isGranted([bool shouldRequest = true]) async {
     final permStatusList = <PermissionStatus>[];
 
     for (final perm in perms) {
       final permStatus = await perm.status;
       if (!permStatus.isGranted) {
-        await perm.shouldShowRequestRationale;
-        final rs = await perm.request();
-        await perm.shouldShowRequestRationale;
+        if (shouldRequest) {
+          final rs = await perm.request();
 
-        if (!rs.isGranted) {
-          permStatusList.add(rs);
+          if (!rs.isGranted) {
+            permStatusList.add(rs);
+          }
+        } else {
+          permStatusList.add(permStatus);
         }
       }
     }
@@ -70,10 +88,9 @@ class PermissionBloc extends MultiStateBloc<PermissionEvent, PermissionState> {
     if (permStatusList.contains(PermissionStatus.denied) ||
         permStatusList.contains(PermissionStatus.restricted) ||
         permStatusList.contains(PermissionStatus.permanentlyDenied)) {
-      emit(const PermissionLoaded());
+      return false;
     } else {
-      DbUtil.savePermission(permission..status = true);
-      emit(const PermissionLoaded(PermissionStatus.granted));
+      return true;
     }
   }
 }

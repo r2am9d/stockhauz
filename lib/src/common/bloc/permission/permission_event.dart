@@ -5,19 +5,15 @@ abstract class PermissionEvent extends Equatable {
   const PermissionEvent();
 
   @override
-  List<Object?> get props => [];
+  List<Object> get props => [];
 }
 
-class PermissionLoad extends PermissionEvent {
-  const PermissionLoad();
+class PermissionInitialize extends PermissionEvent {
+  const PermissionInitialize();
 }
 
 class PermissionValidate extends PermissionEvent {
   const PermissionValidate();
-}
-
-class PermissionObserve extends PermissionEvent {
-  const PermissionObserve();
 }
 
 class PermissionRequest extends PermissionEvent {

@@ -5,7 +5,7 @@ abstract class PermissionState extends Equatable {
   const PermissionState();
 
   @override
-  List<Object?> get props => [];
+  List<Object> get props => [];
 }
 
 class PermissionInitial extends PermissionState {
@@ -20,5 +20,5 @@ class PermissionLoaded extends PermissionState {
   final PermissionStatus status;
 
   @override
-  List<Object?> get props => [status];
+  List<Object> get props => [status];
 }

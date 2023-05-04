@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:stockhauz/gen/colors.gen.dart';
-import 'package:stockhauz/src/bloc/permission/permission_bloc.dart';
+import 'package:stockhauz/src/common/bloc/permission/permission_bloc.dart';
 import 'package:stockhauz/src/pages/permission/widgets/permission_list_widget.dart';
 
 class PermissionPage extends StatelessWidget {

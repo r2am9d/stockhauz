@@ -54,3 +54,7 @@ app.*.map.json
 
 # Private packages
 vendor/
+
+# Lock files
+pubspec.lock
+ios/Podfile.lock
