@@ -1,46 +1,39 @@
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:stockhauz/gen/colors.gen.dart';
-import 'package:stockhauz/src/common/bloc/bottom_navbar/bottom_navbar_bloc.dart';
+import 'package:stockhauz/src/common/providers/bottom_navbar_provider.dart';
 
-class BottomNavbarWidget extends StatelessWidget {
+class BottomNavbarWidget extends ConsumerWidget {
   const BottomNavbarWidget({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<BottomNavbarBloc, BottomNavbarState>(
-      builder: (
-        BuildContext btmNavbarContext,
-        BottomNavbarState btmNavbarState,
-      ) {
-        final btmNavbarBloc = btmNavbarContext.read<BottomNavbarBloc>();
-        final btmNavbarLoadedState =
-            btmNavbarBloc.states<BottomNavbarLoaded>()!;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final beamer = Beamer.of(context);
 
-        return SalomonBottomBar(
-          currentIndex: btmNavbarLoadedState.index,
-          onTap: (index) {
-            btmNavbarBloc.add(BottomNavbarShift(index: index));
-          },
-          items: [
-            SalomonBottomBarItem(
-              title: const Text('Dashboard'),
-              selectedColor: AppColor.primary,
-              icon: const FaIcon(FontAwesomeIcons.lightScroll),
-              activeIcon: const FaIcon(FontAwesomeIcons.solidScroll),
-            ),
-            SalomonBottomBarItem(
-              title: const Text('Product'),
-              selectedColor: AppColor.primary,
-              icon: const FaIcon(FontAwesomeIcons.lightHatChef),
-              activeIcon: const FaIcon(FontAwesomeIcons.solidHatChef),
-            ),
-          ],
-        );
+    return SalomonBottomBar(
+      currentIndex: ref.watch(bottomNavbarProvider),
+      onTap: (index) {
+        beamer.update();
+        ref.read(bottomNavbarProvider.notifier).shift(index);
       },
+      items: [
+        SalomonBottomBarItem(
+          title: const Text('Dashboard'),
+          selectedColor: AppColor.primary,
+          icon: const FaIcon(FontAwesomeIcons.lightScroll),
+          activeIcon: const FaIcon(FontAwesomeIcons.solidScroll),
+        ),
+        SalomonBottomBarItem(
+          title: const Text('Product'),
+          selectedColor: AppColor.primary,
+          icon: const FaIcon(FontAwesomeIcons.lightHatChef),
+          activeIcon: const FaIcon(FontAwesomeIcons.solidHatChef),
+        ),
+      ],
     );
   }
 }

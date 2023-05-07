@@ -8,7 +8,7 @@ class PermissionDao {
 
   static void initializePermission() {
     if (DbUtil.db.permissions.where().isEmptySync()) {
-      final permission = Permission()..status = false;
+      final permission = Permission()..isGranted = false;
       savePermission(permission);
     }
   }

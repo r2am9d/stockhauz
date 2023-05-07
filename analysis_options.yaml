@@ -74,5 +74,6 @@ linter:
     unnecessary_raw_strings: false
     unreachable_from_main: false
     use_decorated_box: false
+    use_setters_to_change_properties: false
     use_string_buffers: false
     use_to_and_as_if_applicable: false

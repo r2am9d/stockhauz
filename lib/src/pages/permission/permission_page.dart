@@ -1,18 +1,19 @@
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:stockhauz/gen/colors.gen.dart';
-import 'package:stockhauz/src/common/bloc/permission/permission_bloc.dart';
+import 'package:stockhauz/src/common/providers/permission_provider.dart';
 import 'package:stockhauz/src/pages/permission/widgets/permission_list_widget.dart';
 
-class PermissionPage extends StatelessWidget {
+class PermissionPage extends ConsumerWidget {
   const PermissionPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final tD = Theme.of(context);
     final mQ = MediaQuery.of(context);
-    final permissionBloc = BlocProvider.of<PermissionBloc>(context);
+    final beamer = Beamer.of(context);
 
     return Scaffold(
       body: Container(
@@ -25,16 +26,6 @@ class PermissionPage extends StatelessWidget {
         ),
         child: Column(
           children: <Widget>[
-            BlocBuilder<PermissionBloc, PermissionState>(
-              builder: (
-                BuildContext permissionContext,
-                PermissionState permissionState,
-              ) {
-                final permissionLoadedState =
-                    permissionBloc.states<PermissionLoaded>();
-                return Text('${permissionLoadedState!.status}');
-              },
-            ),
             Text.rich(
               TextSpan(
                 children: <TextSpan>[
@@ -67,8 +58,9 @@ class PermissionPage extends StatelessWidget {
           color: AppColor.dirtyWhite,
         ),
         child: ElevatedButton(
-          onPressed: () {
-            permissionBloc.add(const PermissionRequest());
+          onPressed: () async {
+            await ref.read(permissionProvider.notifier).request();
+            beamer.update();
           },
           style: ElevatedButton.styleFrom(
             foregroundColor: AppColor.dirtyWhite,

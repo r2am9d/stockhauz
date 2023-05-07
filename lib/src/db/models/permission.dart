@@ -5,5 +5,5 @@ part 'permission.g.dart';
 @Collection()
 class Permission {
   Id id = Isar.autoIncrement;
-  bool status = false;
+  bool isGranted = false;
 }

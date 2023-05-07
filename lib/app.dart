@@ -1,81 +1,51 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:stockhauz/src/common/models/permission_state.dart';
+import 'package:stockhauz/src/common/providers/permission_provider.dart';
 
-import 'package:stockhauz/src/pages/index_page.dart';
-import 'package:stockhauz/src/pages/permission/permission_page.dart';
 import 'package:stockhauz/src/router/app_router.dart';
+import 'package:stockhauz/src/router/locations/app_location.dart';
 
-import 'package:stockhauz/src/utils/log_util.dart';
-import 'package:stockhauz/src/common/bloc/permission/permission_bloc.dart';
-import 'package:stockhauz/src/common/bloc/bottom_navbar/bottom_navbar_bloc.dart';
-
-class App extends StatelessWidget {
+class App extends StatefulHookConsumerWidget {
   const App({super.key, required this.theme});
 
   final ThemeData theme;
 
   @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => BottomNavbarBloc(),
-        ),
-        BlocProvider(
-          create: (context) => PermissionBloc()
-            ..add(const PermissionInitialize())
-            ..add(const PermissionValidate()),
-        ),
-      ],
-      child: _Root(theme: theme),
-    );
-  }
+  ConsumerState<ConsumerStatefulWidget> createState() => _AppState();
 }
 
-class _Root extends StatefulWidget {
-  const _Root({required this.theme});
-
-  final ThemeData theme;
-
-  @override
-  State<_Root> createState() => _RootState();
-}
-
-class _RootState extends State<_Root> with WidgetsBindingObserver {
-  final BeamerDelegate _routerDelegate = BeamerDelegate(
-    initialPath: AppRouter.indexRoute,
-    locationBuilder: RoutesLocationBuilder(
-      routes: {
-        '*': (context, state, data) {
-          return IndexPage();
-        },
-        '/permission': (context, state, data) {
-          return const BeamPage(
-            title: 'Permission',
-            key: ValueKey('permission'),
-            child: PermissionPage(),
-          );
-        },
-      },
-    ).call,
+class _AppState extends ConsumerState<App> with WidgetsBindingObserver {
+  final routerDelegate = BeamerDelegate(
     guards: [
       BeamGuard(
-        guardNonMatching: true,
-        pathPatterns: ['/permission'],
+        pathPatterns: [AppRouter.indexRoute],
         check: (BuildContext context, BeamLocation state) {
-          final permLoadedState = context.watch<PermissionLoaded>();
-          return permLoadedState.status == PermissionStatus.granted;
+          final ref = ProviderScope.containerOf(context, listen: false);
+          return ref.read(permissionProvider.select((status) => status)) ==
+              PermissionStatus.granted;
         },
-        beamToNamed: (origin, target) => '/permission',
+        beamToNamed: (_, __) => AppRouter.permissionRoute,
+      ),
+      BeamGuard(
+        pathPatterns: [AppRouter.permissionRoute],
+        check: (BuildContext context, BeamLocation state) {
+          final ref = ProviderScope.containerOf(context, listen: false);
+          return ref.read(permissionProvider.select((status) => status)) !=
+              PermissionStatus.granted;
+        },
+        beamToNamed: (origin, target) => AppRouter.indexRoute,
       ),
     ],
+    initialPath: AppRouter.permissionRoute,
+    locationBuilder: (routeInformation, _) => AppLocation(routeInformation),
   );
 
   @override
   void initState() {
     super.initState();
+    ref.read(permissionProvider.notifier).initialize();
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -86,24 +56,26 @@ class _RootState extends State<_Root> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    final permissionBloc = BlocProvider.of<PermissionBloc>(context);
-
-    if (state == AppLifecycleState.resumed) {
-      permissionBloc.add(const PermissionValidate());
-      _routerDelegate.beamToNamed(AppRouter.indexRoute);
-    }
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    await ref.read(permissionProvider.notifier).validate();
+    routerDelegate.update();
+    super.didChangeAppLifecycleState(state);
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      theme: widget.theme,
-      routerDelegate: _routerDelegate,
-      debugShowCheckedModeBanner: false,
-      routeInformationParser: BeamerParser(),
-      backButtonDispatcher: BeamerBackButtonDispatcher(
-        delegate: _routerDelegate,
+    ref.watch(permissionProvider);
+
+    return BeamerProvider(
+      routerDelegate: routerDelegate,
+      child: MaterialApp.router(
+        theme: widget.theme,
+        routerDelegate: routerDelegate,
+        debugShowCheckedModeBanner: false,
+        routeInformationParser: BeamerParser(),
+        backButtonDispatcher: BeamerBackButtonDispatcher(
+          delegate: routerDelegate,
+        ),
       ),
     );
   }

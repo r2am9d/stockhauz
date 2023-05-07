@@ -1,40 +1,29 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:stockhauz/src/router/app_router.dart';
 import 'package:stockhauz/src/common/widgets/bottom_navbar_widget.dart';
-import 'package:stockhauz/src/common/bloc/bottom_navbar/bottom_navbar_bloc.dart';
+import 'package:stockhauz/src/common/providers/bottom_navbar_provider.dart';
 
-class IndexPage extends StatelessWidget {
+class IndexPage extends ConsumerWidget {
   IndexPage({super.key});
 
   final routerDelegates = AppRouter.routerDelegates;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      body: BlocBuilder<BottomNavbarBloc, BottomNavbarState>(
-        builder: (
-          BuildContext btmNavbarContext,
-          BottomNavbarState btmNavbarState,
-        ) {
-          final btmNavbarBloc = btmNavbarContext.read<BottomNavbarBloc>();
-          final btmNavbarLoadedState =
-              btmNavbarBloc.states<BottomNavbarLoaded>()!;
-
-          return IndexedStack(
-            index: btmNavbarLoadedState.index,
-            children: [
-              Beamer(
-                routerDelegate: routerDelegates[0],
-              ),
-              Beamer(
-                routerDelegate: routerDelegates[1],
-              ),
-            ],
-          );
-        },
+      body: IndexedStack(
+        index: ref.watch(bottomNavbarProvider),
+        children: [
+          Beamer(
+            routerDelegate: routerDelegates[0],
+          ),
+          Beamer(
+            routerDelegate: routerDelegates[1],
+          ),
+        ],
       ),
       bottomNavigationBar: const BottomNavbarWidget(),
     );

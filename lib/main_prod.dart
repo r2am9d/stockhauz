@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:stockhauz/app.dart';
 import 'package:stockhauz/src/utils/db_util.dart';
@@ -12,5 +13,5 @@ void main() async {
   await DbUtil.initialize();
 
   final appTheme = await AppTheme.instance;
-  runApp(App(theme: appTheme.theme));
+  runApp(ProviderScope(child: App(theme: appTheme.theme)));
 }

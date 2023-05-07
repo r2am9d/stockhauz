@@ -7,6 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:stockhauz/app.dart';
 import 'package:stockhauz/src/themes/app_theme.dart';
@@ -15,7 +16,7 @@ void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     final appTheme = await AppTheme.instance;
-    await tester.pumpWidget(App(theme: appTheme.theme));
+    await tester.pumpWidget(ProviderScope(child: App(theme: appTheme.theme)));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
