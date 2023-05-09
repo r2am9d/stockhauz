@@ -7,10 +7,10 @@ class ProductViewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ProductViewPage'),
+        title: const Text('ProductView'),
       ),
       body: const Center(
-        child: Text('ProductViewPage'),
+        child: Text('ProductView'),
       ),
     );
   }

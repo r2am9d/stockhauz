@@ -24,14 +24,14 @@ class BottomNavbarWidget extends ConsumerWidget {
         SalomonBottomBarItem(
           title: const Text('Dashboard'),
           selectedColor: AppColor.primary,
-          icon: const FaIcon(FontAwesomeIcons.lightScroll),
-          activeIcon: const FaIcon(FontAwesomeIcons.solidScroll),
+          icon: const FaIcon(FontAwesomeIcons.lightGaugeMax),
+          activeIcon: const FaIcon(FontAwesomeIcons.solidGaugeMax),
         ),
         SalomonBottomBarItem(
           title: const Text('Product'),
           selectedColor: AppColor.primary,
-          icon: const FaIcon(FontAwesomeIcons.lightHatChef),
-          activeIcon: const FaIcon(FontAwesomeIcons.solidHatChef),
+          icon: const FaIcon(FontAwesomeIcons.lightBox),
+          activeIcon: const FaIcon(FontAwesomeIcons.solidBox),
         ),
       ],
     );

@@ -8,13 +8,13 @@ class ProductPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ProductPage'),
+        title: const Text('Product'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text('ProductPage'),
+            const Text('Product'),
             ElevatedButton(
               onPressed: () {
                 context.beamToNamed('/product/view/1');
