@@ -58,3 +58,7 @@ vendor/
 # Lock files
 pubspec.lock
 ios/Podfile.lock
+
+# Test files
+coverage/
+test/coverage_helper_test.dart
